@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      title: 'Bottom Sheet Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+        useMaterial3: true,
+      ),
+      home: const HomePage(),
     );
   }
 }
@@ -21,7 +33,7 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(30),
+          padding: const EdgeInsets.all(30),
           child: ElevatedButton(
             onPressed: () {
               showModalBottomSheet(
@@ -35,36 +47,36 @@ class HomePage extends StatelessWidget {
                   child: ListView(
                     children: [
                       ListTile(
-                        onTap: () => print("Klik Foto"),
-                        leading: Icon(Icons.photo),
-                        title: Text("Foto"),
+                        onTap: () => debugPrint("Klik Foto"),
+                        leading: const Icon(Icons.photo),
+                        title: const Text("Foto"),
                       ),
                       ListTile(
-                        onTap: () => print("Klik Music"),
-                        leading: Icon(Icons.music_note_rounded),
-                        title: Text("Music"),
+                        onTap: () => debugPrint("Klik Music"),
+                        leading: const Icon(Icons.music_note_rounded),
+                        title: const Text("Music"),
                       ),
                       ListTile(
-                        onTap: () => print("Klik Video"),
-                        leading: Icon(Icons.video_collection),
-                        title: Text("Video"),
+                        onTap: () => debugPrint("Klik Video"),
+                        leading: const Icon(Icons.video_collection),
+                        title: const Text("Video"),
                       ),
                       ListTile(
-                        onTap: () => print("Klik Share"),
-                        leading: Icon(Icons.share),
-                        title: Text("Share"),
+                        onTap: () => debugPrint("Klik Share"),
+                        leading: const Icon(Icons.share),
+                        title: const Text("Share"),
                       ),
                       ListTile(
                         onTap: () => Navigator.pop(context),
-                        leading: Icon(Icons.cancel),
-                        title: Text("Cancel"),
+                        leading: const Icon(Icons.cancel),
+                        title: const Text("Cancel"),
                       ),
                     ],
                   ),
                 ),
               );
             },
-            child: Text("Show Bottom Sheet"),
+            child: const Text("Show Bottom Sheet"),
           ),
         ),
       ),
