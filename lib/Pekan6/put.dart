@@ -62,28 +62,32 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 15),
           ElevatedButton(
             onPressed: () async {
+              String nameInput = nameC.text;
+              String jobInput = jobC.text;
+
               try {
-                String nameInput = nameC.text;
-                String jobInput = jobC.text;
-                setState(() {
-                  hasilResponse =
-                  "Data berhasil diupdate!\nName : $nameInput\nJob : $jobInput";
-                });
-                try {
-                  var myresponse = await http.put(
-                    Uri.parse("https://reqres.in/api/users/2"),
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: json.encode({
-                      "name": nameInput,
-                      "job": jobInput,
-                    }),
-                  );
-                  print("Status code: ${myresponse.statusCode}");
-                  print("Response body: ${myresponse.body}");
-                } catch (e) {
-                  print("API Error: $e");
+                var myresponse = await http.put(
+                  Uri.parse("https://reqres.in/api/users/1"),
+                  headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": "reqres-free-v1"
+                  },
+                  body: json.encode({
+                    "name": nameInput,
+                    "job": jobInput,
+                  }),
+                );
+                if (myresponse.statusCode == 200) {
+                  var responseBody = json.decode(myresponse.body);
+                  setState(() {
+                    hasilResponse =
+                    "Data berhasil diupdate!\nName: ${responseBody['name']}\nJob: ${responseBody['job']}";
+                  });
+                } else {
+                  setState(() {
+                    hasilResponse =
+                    "Gagal update data. Error: ${myresponse.statusCode}\nBody: ${myresponse.body}";
+                  });
                 }
               } catch (e) {
                 print("Error: $e");

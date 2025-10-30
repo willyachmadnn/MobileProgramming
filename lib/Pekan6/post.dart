@@ -60,28 +60,37 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 15),
           ElevatedButton(
             onPressed: () async {
+              String nameInput = nameC.text;
+              String jobInput = jobC.text;
+
               try {
-                setState(() {
-                  hasilResponse =
-                      "Data berhasil dikirim!\n\nName : ${nameC.text}\nJob : ${jobC.text}";
-                });
                 var myresponse = await http.post(
                   Uri.parse("https://reqres.in/api/users"),
-                  body: json.encode({
-                    "name": nameC.text,
-                    "job": jobC.text
-                  }),
                   headers: {
                     "Content-Type": "application/json",
+                    "x-api-key": "reqres-free-v1"
                   },
+                  body: json.encode({
+                    "name": nameInput,
+                    "job": jobInput,
+                  }),
                 );
-                print("Response status: ${myresponse.statusCode}");
-                print("Response body: ${myresponse.body}");
+                if (myresponse.statusCode == 201) {
+                  var responseBody = json.decode(myresponse.body);
+                  setState(() {
+                    hasilResponse =
+                    "Data berhasil dibuat!\nID: ${responseBody['id']}\nName: ${responseBody['name']}\nJob: ${responseBody['job']}";
+                  });
+                } else {
+                  setState(() {
+                    hasilResponse =
+                    "Gagal mengirim data. Error: ${myresponse.statusCode}\nBody: ${myresponse.body}";
+                  });
+                }
               } catch (e) {
                 print("Error: $e");
                 setState(() {
-                  hasilResponse =
-                      "Data berhasil dikirim!\n\nName : ${nameC.text}\nJob : ${jobC.text}";
+                  hasilResponse = "Terjadi kesalahan: $e";
                 });
               }
             },

@@ -48,7 +48,11 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 var myresponse = await myhttp
-                    .get(Uri.parse("https://reqres.in/api/users/3"));
+                    .get(Uri.parse("https://reqres.in/api/users/1"),
+                headers: {
+                  'x-api-key': 'reqres-free-v1'
+                  },
+                );
 
                 if (myresponse.statusCode == 200) {
                   print("BERHASIL GET DATA");

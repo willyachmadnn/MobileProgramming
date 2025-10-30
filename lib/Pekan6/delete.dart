@@ -28,6 +28,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String data = "belum ada data";
 
+  final Map<String, String> _apiHeaders = {
+    'x-api-key': 'reqres-free-v1',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,16 +40,10 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () async {
-              var headers = {
-                'Content-Type': 'application/json',
-                'X-API-Key':
-                    'your-api-key-here',
-              };
-
               try {
                 var response = await http.get(
-                  Uri.parse("https://reqres.in/api/users/2"),
-                  headers: headers,
+                  Uri.parse("https://reqres.in/api/users/1"),
+                  headers: _apiHeaders,
                 );
 
                 if (response.statusCode == 200) {
@@ -53,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                   print(mybody);
                   setState(() {
                     data =
-                        "Akun : ${mybody['data']['first_name']} ${mybody['data']['last_name']}";
+                    "Akun : ${mybody['data']['first_name']} ${mybody['data']['last_name']}";
                   });
                 } else {
                   print("Error: ${response.statusCode}");
@@ -79,21 +77,23 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 35),
           ElevatedButton(
             onPressed: () async {
+              // Tombol DELETE
               try {
-                setState(() {
-                  data = "Berhasil menghapus data";
-                });
-                try {
-                  var response = await http.delete(
-                    Uri.parse("https://reqres.in/api/users/2"),
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                  );
+                var response = await http.delete(
+                  Uri.parse("https://reqres.in/api/users/2"),
+                  headers: _apiHeaders,
+                );
+                if (response.statusCode == 204) {
+                  setState(() {
+                    data = "Berhasil menghapus data (Status: 204)";
+                  });
+                  print("Status code: ${response.statusCode}");
+                } else {
+                 setState(() {
+                    data = "Gagal menghapus data. Error: ${response.statusCode}\nBody: ${response.body}";
+                  });
                   print("Status code: ${response.statusCode}");
                   print("Response body: ${response.body}");
-                } catch (e) {
-                  print("API Error: $e");
                 }
               } catch (e) {
                 print("Exception: $e");

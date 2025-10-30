@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/user.dart';
-
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,85 +10,33 @@ class HomePage extends StatelessWidget {
     try {
       print("Fetching data from ReqRes API...");
 
-      try {
-        var response = await http.get(
-          Uri.parse("https://reqres.in/api/users"),
-        );
-        
-        print("Response status code: ${response.statusCode}");
-        print("Response body: ${response.body}");
-        
-        if (response.statusCode == 200) {
-          final responseData = json.decode(response.body) as Map<String, dynamic>;
-          print("Parsed response data: $responseData");
-          
-          final userResponse = UserResponse.fromJson(responseData);
-          print("User response data length: ${userResponse.data.length}");
-          
-          return userResponse.data;
-        } else if (response.statusCode == 401) {
-          print("API memerlukan autentikasi. Menggunakan data simulasi.");
-          return _getSimulatedData();
-        } else {
-          throw Exception('HTTP Error: ${response.statusCode} - ${response.reasonPhrase}');
-        }
-      } catch (e) {
-        print("Error saat mengakses API: $e");
-        print("Menggunakan data simulasi sebagai fallback.");
-        return _getSimulatedData();
+      var response = await http.get(
+        Uri.parse("https://reqres.in/api/users"),
+        headers: {
+          'x-api-key': 'reqres-free-v1',
+        },
+      );
+
+      print("Response status code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final responseData =
+        json.decode(response.body) as Map<String, dynamic>;
+        print("Parsed response data: $responseData");
+
+        final userResponse = UserResponse.fromJson(responseData);
+        print("User response data length: ${userResponse.data.length}");
+
+        return userResponse.data;
+      } else {
+        throw Exception(
+            'HTTP Error: ${response.statusCode} - ${response.reasonPhrase}');
       }
     } catch (e) {
-      print("Error occurred: $e");
+      print("Error saat mengakses API: $e");
       rethrow;
     }
   }
-  List<UserModel> _getSimulatedData() {
-    return [
-      UserModel(
-        id: 1,
-        email: "george.bluth@reqres.in",
-        firstName: "George",
-        lastName: "Bluth",
-        avatar: "https://reqres.in/img/faces/1-image.jpg",
-      ),
-      UserModel(
-        id: 2,
-        email: "janet.weaver@reqres.in",
-        firstName: "Janet",
-        lastName: "Weaver",
-        avatar: "https://reqres.in/img/faces/2-image.jpg",
-      ),
-      UserModel(
-        id: 3,
-        email: "emma.wong@reqres.in",
-        firstName: "Emma",
-        lastName: "Wong",
-        avatar: "https://reqres.in/img/faces/3-image.jpg",
-      ),
-      UserModel(
-        id: 4,
-        email: "eve.holt@reqres.in",
-        firstName: "Eve",
-        lastName: "Holt",
-        avatar: "https://reqres.in/img/faces/4-image.jpg",
-      ),
-      UserModel(
-        id: 5,
-        email: "charles.morris@reqres.in",
-        firstName: "Charles",
-        lastName: "Morris",
-        avatar: "https://reqres.in/img/faces/5-image.jpg",
-      ),
-      UserModel(
-        id: 6,
-        email: "tracey.ramos@reqres.in",
-        firstName: "Tracey",
-        lastName: "Ramos",
-        avatar: "https://reqres.in/img/faces/6-image.jpg",
-      ),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,7 +95,8 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "Please check your internet connection",
+                    snapshot.error.toString(),
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[600],
@@ -205,7 +152,7 @@ class HomePage extends StatelessWidget {
                 ),
               );
             }
-            
+
             return Padding(
               padding: EdgeInsets.all(16),
               child: ListView.separated(
@@ -240,21 +187,23 @@ class HomePage extends StatelessWidget {
                             child: CircleAvatar(
                               radius: 30,
                               backgroundColor: Colors.blue[100],
-                              backgroundImage: user.avatar.isNotEmpty 
-                                  ? NetworkImage(user.avatar) 
+                              backgroundImage: user.avatar.isNotEmpty
+                                  ? NetworkImage(user.avatar)
                                   : null,
-                              child: user.avatar.isEmpty 
+                              child: user.avatar.isEmpty
                                   ? Text(
-                                      user.initials,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.blue[700],
-                                      ),
-                                    )
+                                user.initials,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.blue[700],
+                                ),
+                              )
                                   : null,
-                              onBackgroundImageError: (exception, stackTrace) {
-                                print("Error loading avatar for ${user.fullName}: $exception");
+                              onBackgroundImageError:
+                                  (exception, stackTrace) {
+                                print(
+                                    "Error loading avatar for ${user.fullName}: $exception");
                               },
                             ),
                           ),
