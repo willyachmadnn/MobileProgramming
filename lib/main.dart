@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'Pekan5/Instagram/instagram_app.dart';
+import 'Pekan6/futurebuilder.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -10,9 +10,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: InstagramApp(),
+      home: HomePage(),
     );
   }
 }
