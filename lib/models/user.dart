@@ -35,15 +35,12 @@ class UserModel {
         "avatar": avatar,
       };
 
-  // Helper method untuk mendapatkan nama lengkap
   String get fullName => "$firstName $lastName";
 
-  // Helper method untuk validasi email
   bool get isValidEmail {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 
-  // Helper method untuk mendapatkan inisial nama
   String get initials {
     return "${firstName.isNotEmpty ? firstName[0] : ''}${lastName.isNotEmpty ? lastName[0] : ''}".toUpperCase();
   }
@@ -64,7 +61,6 @@ class UserModel {
     return id.hashCode;
   }
 
-  // Copy with method untuk immutability
   UserModel copyWith({
     int? id,
     String? email,
@@ -82,7 +78,6 @@ class UserModel {
   }
 }
 
-// Model untuk response API yang berisi list users
 class UserResponse {
   int page;
   int perPage;
