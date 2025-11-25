@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-
-void main()async {
+void main() async {
   await GetStorage.init();
   runApp(MyApp());
 }
@@ -11,7 +10,7 @@ void main()async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       home: HomePage(),
     );
   }
@@ -34,18 +33,20 @@ class HomePage extends StatelessWidget {
               },
               child: Text("Simpan Data"),
             ),
-            SizedBox(height: 20,),
-            ElevatedButton(onPressed: () {
-              String username = box.read('username') ?? 'Tidak ada data';
-              Get.snackbar("Data", username);
-            },
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                String username = box.read('username') ?? 'Tidak ada data';
+                Get.snackbar("Data", username);
+              },
               child: Text("Ambil Data"),
             ),
-            SizedBox(height: 20,),
-            ElevatedButton(onPressed: () {
-              String username = box.read('username') ?? 'Tidak ada data';
-              Get.snackbar("Data", username);
-            },
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                box.remove('username');
+                Get.snackbar("Data", "Data dihapus");
+              },
               child: Text("Hapus Data"),
             )
           ],
